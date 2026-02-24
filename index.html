@@ -226,9 +226,11 @@ select, input {
 
 <script>
 
-    const projectLink = repo.homepage 
-    ? repo.homepage 
-    : `https://${username}.github.io/${repo.name}/`;
+const pagesUrl = `https://${username}.github.io/${repo.name}/`;
+
+const projectLink = repo.homepage && repo.homepage.trim() !== ""
+    ? repo.homepage
+    : pagesUrl;
 
 card.innerHTML = `
     <h3>${repo.name}</h3>
@@ -236,7 +238,7 @@ card.innerHTML = `
     <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
     <p>📅 ${updatedDate}</p>
     <a href="${projectLink}" target="_blank">Abrir Projeto</a>
-`;
+`;    
 
 const username = "JoaoPaulo746";
 let allRepos = [];
