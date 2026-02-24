@@ -224,22 +224,7 @@ select, input {
     </div>
 </div>
 
-<script>
-
-const pagesUrl = `https://${username}.github.io/${repo.name}/`;
-
-const projectLink = repo.homepage && repo.homepage.trim() !== ""
-    ? repo.homepage
-    : pagesUrl;
-
-card.innerHTML = `
-    <h3>${repo.name}</h3>
-    <p>${repo.description || "Sem descrição."}</p>
-    <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
-    <p>📅 ${updatedDate}</p>
-    <a href="${projectLink}" target="_blank">Abrir Projeto</a>
-`;    
-
+<script> 
 const username = "JoaoPaulo746";
 let allRepos = [];
 
@@ -458,7 +443,22 @@ document.addEventListener("mousemove", e => {
 
     setTimeout(() => trail.remove(), 400);
 });
+
+    const pagesUrl = `https://${username}.github.io/${repo.name}/`;
+
+const projectLink = repo.homepage && repo.homepage.trim() !== ""
+    ? repo.homepage
+    : pagesUrl;
+
+card.innerHTML = `
+    <h3>${repo.name}</h3>
+    <p>${repo.description || "Sem descrição."}</p>
+    <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
+    <p>📅 ${updatedDate}</p>
+    <a href="${projectLink}" target="_blank">Abrir Projeto</a>
+`;   
 </script>
 
 </body>
 </html>
+
