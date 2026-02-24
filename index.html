@@ -444,21 +444,34 @@ document.addEventListener("mousemove", e => {
     setTimeout(() => trail.remove(), 400);
 });
 
-const pagesUrl = `https://JoaoPaulo746.github.io/${repo.name}/`;
+    categories[lang].forEach(repo => {
 
-card.innerHTML = `
-    <h3>${repo.name}</h3>
-    <p>${repo.description || "Sem descrição."}</p>
-    <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
-    <p>📅 ${updatedDate}</p>
-    <a href="${pagesUrl}" target="_blank" rel="noopener noreferrer">
-        Abrir Projeto
-    </a>
-`;a href="${projectLink}" target="_blank">Abrir Projeto</a>
+    const card = document.createElement("div");
+    card.classList.add("project-card");
+
+    const updatedDate = new Date(repo.updated_at)
+        .toLocaleDateString("pt-BR");
+
+    const pagesUrl = `https://JoaoPaulo746.github.io/${repo.name}/`;
+
+    card.innerHTML = `
+        <h3>${repo.name}</h3>
+        <p>${repo.description || "Sem descrição."}</p>
+        <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
+        <p>📅 ${updatedDate}</p>
+        <a href="${pagesUrl}" target="_blank">
+            Abrir Projeto
+        </a>
+    `;
+
+    grid.appendChild(card);
+
+});
     
 </script>
 
 </body>
 </html>
+
 
 
