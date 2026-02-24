@@ -225,6 +225,19 @@ select, input {
 </div>
 
 <script>
+
+    const projectLink = repo.homepage 
+    ? repo.homepage 
+    : `https://${username}.github.io/${repo.name}/`;
+
+card.innerHTML = `
+    <h3>${repo.name}</h3>
+    <p>${repo.description || "Sem descrição."}</p>
+    <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
+    <p>📅 ${updatedDate}</p>
+    <a href="${projectLink}" target="_blank">Abrir Projeto</a>
+`;
+
 const username = "JoaoPaulo746";
 let allRepos = [];
 
