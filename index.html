@@ -444,21 +444,21 @@ document.addEventListener("mousemove", e => {
     setTimeout(() => trail.remove(), 400);
 });
 
-    const pagesUrl = `https://${username}.github.io/${repo.name}/`;
-
-const projectLink = repo.homepage && repo.homepage.trim() !== ""
-    ? repo.homepage
-    : pagesUrl;
+const pagesUrl = `https://JoaoPaulo746.github.io/${repo.name}/`;
 
 card.innerHTML = `
     <h3>${repo.name}</h3>
     <p>${repo.description || "Sem descrição."}</p>
     <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
     <p>📅 ${updatedDate}</p>
-    <a href="${projectLink}" target="_blank">Abrir Projeto</a>
-`;   
+    <a href="${pagesUrl}" target="_blank" rel="noopener noreferrer">
+        Abrir Projeto
+    </a>
+`;a href="${projectLink}" target="_blank">Abrir Projeto</a>
+    
 </script>
 
 </body>
 </html>
+
 
