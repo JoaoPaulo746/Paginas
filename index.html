@@ -226,6 +226,17 @@ select, input {
 
 <script> 
 const username = "JoaoPaulo746";
+
+    card.innerHTML = `
+    <h3>${repo.name}</h3>
+    <p>${repo.description || "Sem descrição."}</p>
+    <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
+    <p>📅 ${updatedDate}</p>
+    <a href="${pagesUrl}" target="_blank">
+        Abrir Projeto
+    </a>
+`;
+    
 let allRepos = [];
 
 async function fetchRepos() {
@@ -444,34 +455,11 @@ document.addEventListener("mousemove", e => {
     setTimeout(() => trail.remove(), 400);
 });
 
-    categories[lang].forEach(repo => {
-
-    const card = document.createElement("div");
-    card.classList.add("project-card");
-
-    const updatedDate = new Date(repo.updated_at)
-        .toLocaleDateString("pt-BR");
-
-    const pagesUrl = `https://JoaoPaulo746.github.io/${repo.name}/`;
-
-    card.innerHTML = `
-        <h3>${repo.name}</h3>
-        <p>${repo.description || "Sem descrição."}</p>
-        <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
-        <p>📅 ${updatedDate}</p>
-        <a href="${pagesUrl}" target="_blank">
-            Abrir Projeto
-        </a>
-    `;
-
-    grid.appendChild(card);
-
-});
-    
 </script>
 
 </body>
 </html>
+
 
 
 
