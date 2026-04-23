@@ -190,6 +190,11 @@ select, input {
 <div class="container">
 <h1> Portfólio - João Paulo</h1>
 
+    <div style="text-align:center; margin-top:20px;">
+    <h2>📱 Acesse pelo QR Code</h2>
+    <img src="assets/qrcode.png" alt="QR Code" width="180" style="border-radius:10px; background:#fff; padding:10px;">
+</div>
+
 <div class="controls">
 <select id="languageFilter">
 <option value="all">Todas Linguagens</option>
@@ -443,16 +448,6 @@ document.addEventListener("mousemove", e => {
 
     setTimeout(() => trail.remove(), 400);
 });
-
-        card.innerHTML = `
-    <h3>${repo.name}</h3>
-    <p>${repo.description || "Sem descrição."}</p>
-    <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
-    <p>📅 ${updatedDate}</p>
-    <a href="${pagesUrl}" target="_blank">
-        Abrir Projeto
-    </a>
-`;
 
 </script>
 
