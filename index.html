@@ -1,38 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portfólio - João Paulo</title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-    /* Parallax suave no container */
-.container {
-    transition: transform 0.2s ease-out;
-}
 
-/* Cursor glow */
-.cursor-trail {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    background: #ffcc00;
-    border-radius: 50%;
-    pointer-events: none;
-    box-shadow: 0 0 15px #ffcc00, 0 0 30px #ffcc00;
-    z-index: 9999;
-    opacity: 0.8;
-    animation: fadeOut 0.6s forwards;
-}
-
-@keyframes fadeOut {
-    to {
-        opacity: 0;
-        transform: scale(0.5);
-    }
-}
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -42,13 +19,32 @@ body {
     overflow-x: hidden;
 }
 
+/* ── Stars canvas ── */
 canvas#stars {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     z-index: -1;
+    pointer-events: none;
 }
 
+/* ── Cursor trail ── */
+.cursor-trail {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: #ffcc00;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 15px #ffcc00, 0 0 30px #ffcc00;
+    z-index: 9999;
+    opacity: 0.8;
+    transform: translate(-50%, -50%);
+    animation: trailFade 0.5s forwards;
+}
+@keyframes trailFade {
+    to { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+}
+
+/* ── Main container ── */
 .container {
     width: 90%;
     max-width: 1200px;
@@ -57,74 +53,196 @@ canvas#stars {
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 0 40px rgba(255,204,0,0.2);
+    transition: transform 0.2s ease-out;
 }
 
 h1 {
     text-align: center;
     color: #ffcc00;
-}
-
-.controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
+    font-size: 2rem;
     margin-bottom: 30px;
 }
 
-select, input {
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
+/* ── QR Codes ── */
+.qr-section {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin: 20px 0 40px;
+}
+.qr-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.qr-item h2 {
+    margin: 0;
+    color: #ffcc00;
     font-size: 1rem;
 }
-
-.category {
-    margin-top: 40px;
+.qr-item img {
+    border-radius: 10px;
+    background: #fff;
+    padding: 10px;
+    width: 180px;
 }
 
-.category h2 {
-    color: #ffcc00;
+/* ── Controls ── */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.controls select,
+.controls input {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+.controls select:focus,
+.controls input:focus {
+    border-color: #ffcc00;
 }
 
+/* ── Loading / Error ── */
+#status-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #aaa;
+    font-size: 1rem;
+}
+#status-message.error { color: #ff6b6b; }
+
+.spinner {
+    display: inline-block;
+    width: 28px; height: 28px;
+    border: 3px solid #333;
+    border-top-color: #ffcc00;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Category sections ── */
+.category { margin-top: 40px; }
+.category h2 { color: #ffcc00; margin-bottom: 16px; }
+
+/* ── Project grid ── */
 .projects {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
-    margin-top: 20px;
 }
 
+/* ── Project card ── */
 .project-card {
     background: #111;
     padding: 20px;
-    border-radius: 10px;
-    transition: 0.4s;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     opacity: 0;
     transform: translateY(20px);
-    animation: fadeIn 0.6s forwards;
+    animation: cardIn 0.5s forwards;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid transparent;
 }
-
 .project-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 0 20px rgba(255,204,0,0.5);
+    transform: translateY(-6px);
+    box-shadow: 0 0 22px rgba(255,204,0,0.45);
+    border-color: rgba(255,204,0,0.2);
+}
+@keyframes cardIn {
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
 }
-
-.project-card h3 {
+.card-header h3 {
+    margin: 0;
     color: #ffcc00;
+    font-size: 1rem;
 }
 
-.project-card a {
+/* Language badge */
+.lang-badge {
+    font-size: 0.72rem;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: rgba(255,204,0,0.15);
     color: #ffcc00;
+    border: 1px solid rgba(255,204,0,0.3);
+    white-space: nowrap;
+}
+
+.card-description {
+    font-size: 0.88rem;
+    color: #bbb;
+    flex-grow: 1;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.card-meta {
+    font-size: 0.82rem;
+    color: #888;
+    margin: 0;
+}
+
+/* Card action buttons */
+.card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+.btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 0.82rem;
+    font-weight: 600;
     text-decoration: none;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+.btn:hover { opacity: 0.85; transform: scale(1.03); }
+
+.btn-site {
+    background: #ffcc00;
+    color: #000;
+}
+.btn-github {
+    background: #1a1a1a;
+    color: #fff;
+    border: 1px solid #333;
 }
 
+/* ── Dashboard ── */
 .dashboard {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -132,164 +250,187 @@ select, input {
     margin-top: 50px;
     align-items: center;
 }
-
 .dashboard-chart {
     background: #111;
     padding: 20px;
     border-radius: 12px;
-    height: 260px;
 }
-
-.dashboard-chart canvas {
-    max-height: 200px;
-}
+.dashboard-chart h2 { margin: 0 0 12px; color: #ffcc00; }
+.dashboard-chart canvas { max-height: 200px; }
 
 .dashboard-stats {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
-
 .stat-box {
     background: #111;
     padding: 20px;
     border-radius: 12px;
     text-align: center;
-    transition: 0.3s;
+    transition: transform 0.25s, box-shadow 0.25s;
+    border: 1px solid transparent;
 }
-
 .stat-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 15px rgba(255,204,0,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 0 15px rgba(255,204,0,0.35);
+    border-color: rgba(255,204,0,0.2);
 }
+.stat-box h3 { margin: 0; font-size: 1.8rem; color: #ffcc00; }
+.stat-box p  { margin: 6px 0 0; font-size: 0.85rem; opacity: 0.75; }
 
-.stat-box h3 {
-    margin: 0;
-    font-size: 1.8rem;
-    color: #ffcc00;
-}
-
-.stat-box p {
-    margin: 5px 0 0;
-    font-size: 0.9rem;
-    opacity: 0.8;
-}
-
+/* ── Responsive ── */
 @media (max-width: 768px) {
-    .dashboard {
-        grid-template-columns: 1fr;
-    }
+    .container { padding: 24px 18px; }
+    .dashboard { grid-template-columns: 1fr; }
+    h1 { font-size: 1.5rem; }
 }
 </style>
 </head>
 
 <body>
-
 <canvas id="stars"></canvas>
 
 <div class="container">
-<h1> Portfólio - João Paulo</h1>
+    <h1>🚀 Portfólio — João Paulo</h1>
 
-<div style="text-align:center; margin-top:20px;">
-
-    <div style="
-        display:flex;
-        justify-content:center;
-        gap:40px;
-        align-items:flex-start;
-        flex-wrap:wrap;
-    ">
-
-        <!-- QR 1 -->
-        <div style="display:flex; flex-direction:column; align-items:center;">
-            <h2>1 - ReactNative</h2>
-            <img src="assets/qrcode.png" width="180"
-            style="border-radius:10px; background:#fff; padding:10px;">
+    <!-- QR Codes -->
+    <div class="qr-section">
+        <div class="qr-item">
+            <h2>App 1 — ReactNative</h2>
+            <img src="assets/qrcode.png" alt="QR Code App 1">
         </div>
-
-        <!-- QR 2 -->
-        <div style="display:flex; flex-direction:column; align-items:center;">
-            <h2>2 - ReactNative</h2>
-            <img src="assets/qrcode2.png" width="180"
-            style="border-radius:10px; background:#fff; padding:10px;">
+        <div class="qr-item">
+            <h2>App 2 — ReactNative</h2>
+            <img src="assets/qrcode2.png" alt="QR Code App 2">
         </div>
-
     </div>
 
-</div>
-
-<div class="controls">
-<select id="languageFilter">
-<option value="all">Todas Linguagens</option>
-</select>
-
-<input type="text" id="searchInput" placeholder="Buscar projeto...">
-</div>
-
-<div id="categories-container"></div>
-
-<div class="dashboard">
-    <div class="dashboard-chart">
-        <h2>📊 Linguagens</h2>
-        <canvas id="languageChart"></canvas>
+    <!-- Filters -->
+    <div class="controls">
+        <select id="languageFilter">
+            <option value="all">🌐 Todas Linguagens</option>
+        </select>
+        <input type="text" id="searchInput" placeholder="🔍 Buscar projeto...">
     </div>
 
-    <div class="dashboard-stats">
-        <div class="stat-box">
-            <h3 id="totalRepos">0</h3>
-            <p>Repositórios</p>
-        </div>
+    <!-- Status (loading / error) -->
+    <div id="status-message">
+        <span class="spinner"></span> Carregando projetos...
+    </div>
 
-        <div class="stat-box">
-            <h3 id="topLanguage">-</h3>
-            <p>Linguagem Principal</p>
-        </div>
+    <!-- Project categories injected here -->
+    <div id="categories-container"></div>
 
-        <div class="stat-box">
-            <h3 id="totalStars">0</h3>
-            <p>Total de Stars</p>
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard" style="display:none;">
+        <div class="dashboard-chart">
+            <h2>📊 Linguagens</h2>
+            <canvas id="languageChart"></canvas>
+        </div>
+        <div class="dashboard-stats">
+            <div class="stat-box">
+                <h3 id="totalRepos">0</h3>
+                <p>Repositórios</p>
+            </div>
+            <div class="stat-box">
+                <h3 id="topLanguage">—</h3>
+                <p>Linguagem Principal</p>
+            </div>
+            <div class="stat-box">
+                <h3 id="totalStars">0</h3>
+                <p>Total de Stars ⭐</p>
+            </div>
         </div>
     </div>
 </div>
 
-<script> 
-const username = "JoaoPaulo746"; 
+<script>
+/* ═══════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════ */
+const USERNAME = "JoaoPaulo746";
 let allRepos = [];
+let chartInstance = null;
 
+/* ═══════════════════════════════════════════
+   FETCH
+═══════════════════════════════════════════ */
 async function fetchRepos() {
-    const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
-    const repos = await response.json();
-    allRepos = repos.filter(r => !r.fork);
-    populateFilter();
-    renderProjects();
-    createChart();
+    try {
+        const res = await fetch(
+            `https://api.github.com/users/${USERNAME}/repos?sort=updated&per_page=100`
+        );
+
+        if (!res.ok) {
+            const msg = res.status === 403
+                ? "Limite da API do GitHub atingido. Tente novamente em alguns minutos."
+                : `Erro ao buscar repositórios (${res.status}).`;
+            showError(msg);
+            return;
+        }
+
+        const repos = await res.json();
+        allRepos = repos.filter(r => !r.fork);
+
+        populateFilter();
+        renderProjects();
+        createChart();
+
+        document.getElementById("status-message").style.display = "none";
+        document.getElementById("dashboard").style.display = "grid";
+
+    } catch (err) {
+        showError("Falha de conexão. Verifique sua internet e recarregue a página.");
+        console.error(err);
+    }
 }
 
+function showError(msg) {
+    const el = document.getElementById("status-message");
+    el.className = "error";
+    el.innerHTML = `⚠️ ${msg}`;
+}
+
+/* ═══════════════════════════════════════════
+   FILTER POPULATION
+═══════════════════════════════════════════ */
 function populateFilter() {
-    const languages = new Set(allRepos.map(r => r.language || "Outros"));
-    const filter = document.getElementById("languageFilter");
+    const languages = [...new Set(allRepos.map(r => r.language || "Outros"))].sort();
+    const select = document.getElementById("languageFilter");
 
     languages.forEach(lang => {
-        const option = document.createElement("option");
-        option.value = lang;
-        option.textContent = lang;
-        filter.appendChild(option);
+        const opt = document.createElement("option");
+        opt.value = lang;
+        opt.textContent = lang;
+        select.appendChild(opt);
     });
 }
 
+/* ═══════════════════════════════════════════
+   RENDER PROJECTS
+═══════════════════════════════════════════ */
 function renderProjects() {
     const container = document.getElementById("categories-container");
     container.innerHTML = "";
 
     const selectedLang = document.getElementById("languageFilter").value;
-    const searchText = document.getElementById("searchInput").value.toLowerCase();
+    const searchText   = document.getElementById("searchInput").value.toLowerCase().trim();
 
     const filtered = allRepos.filter(repo => {
-        const matchesLang = selectedLang === "all" || (repo.language || "Outros") === selectedLang;
-        const matchesSearch = repo.name.toLowerCase().includes(searchText);
-        return matchesLang && matchesSearch;
+        const lang = repo.language || "Outros";
+        const matchLang   = selectedLang === "all" || lang === selectedLang;
+        const matchSearch = repo.name.toLowerCase().includes(searchText)
+                         || (repo.description || "").toLowerCase().includes(searchText);
+        return matchLang && matchSearch;
     });
 
+    if (filtered.length === 0) {
+        container.innerHTML = `<p style="text-align:center;color:#888;padding:30px 0;">Nenhum projeto encontrado.</p>`;
+        return;
+    }
+
+    // Group by language
     const categories = {};
     filtered.forEach(repo => {
         const lang = repo.language || "Outros";
@@ -299,44 +440,90 @@ function renderProjects() {
 
     const fragment = document.createDocumentFragment();
 
-    for (const lang in categories) {
-        const section = document.createElement("div");
-        section.classList.add("category");
+    Object.entries(categories)
+        .sort((a, b) => b[1].length - a[1].length)
+        .forEach(([lang, repos]) => {
+            const section = document.createElement("div");
+            section.className = "category";
 
-        const title = document.createElement("h2");
-        title.textContent = `🌌 ${lang}`;
+            const title = document.createElement("h2");
+            title.textContent = `🌌 ${lang}`;
 
-        const grid = document.createElement("div");
-        grid.classList.add("projects");
+            const grid = document.createElement("div");
+            grid.className = "projects";
 
-        categories[lang].forEach(repo => {
-            const card = document.createElement("div");
-            card.classList.add("project-card");
+            repos.forEach((repo, idx) => {
+                grid.appendChild(buildCard(repo, idx));
+            });
 
-            const updatedDate = new Date(repo.updated_at).toLocaleDateString("pt-BR");
-
-            card.innerHTML = `
-                <h3>${repo.name}</h3>
-                <p>${repo.description || "Sem descrição."}</p>
-                <p>⭐ ${repo.stargazers_count} | 🍴 ${repo.forks_count}</p>
-                <p>📅 ${updatedDate}</p>
-                <a href="${repo.html_url}" target="_blank">Ver no GitHub</a>
-            `;
-
-            grid.appendChild(card);
+            section.appendChild(title);
+            section.appendChild(grid);
+            fragment.appendChild(section);
         });
-
-        section.appendChild(title);
-        section.appendChild(grid);
-        fragment.appendChild(section);
-    }
 
     container.appendChild(fragment);
 }
 
+/* ═══════════════════════════════════════════
+   BUILD CARD
+   → Se o repo tiver homepage: abre direto no site
+   → Sempre mostra botão GitHub também
+═══════════════════════════════════════════ */
+function buildCard(repo, idx) {
+    const card = document.createElement("div");
+    card.className = "project-card";
+    card.style.animationDelay = `${idx * 0.05}s`;
+
+    const updatedDate = new Date(repo.updated_at).toLocaleDateString("pt-BR");
+    const lang = repo.language || "Outros";
+
+    // Determine primary URL
+    const siteUrl   = repo.homepage && repo.homepage.trim() !== "" ? repo.homepage.trim() : null;
+    const githubUrl = repo.html_url;
+
+    // Build action buttons
+    let actionsHTML = "";
+    if (siteUrl) {
+        actionsHTML += `
+            <a class="btn btn-site" href="${siteUrl}" target="_blank" rel="noopener">
+                🌐 Ver Site
+            </a>`;
+    }
+    actionsHTML += `
+        <a class="btn btn-github" href="${githubUrl}" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+                    0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+                    -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+                    .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+                    -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27
+                    .68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12
+                    .51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+                    0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            GitHub
+        </a>`;
+
+    card.innerHTML = `
+        <div class="card-header">
+            <h3>${repo.name}</h3>
+            <span class="lang-badge">${lang}</span>
+        </div>
+        <p class="card-description">${repo.description || "Sem descrição."}</p>
+        <p class="card-meta">⭐ ${repo.stargazers_count} &nbsp;🍴 ${repo.forks_count} &nbsp;📅 ${updatedDate}</p>
+        <div class="card-actions">${actionsHTML}</div>
+    `;
+
+    return card;
+}
+
+/* Event listeners */
 document.getElementById("languageFilter").addEventListener("change", renderProjects);
 document.getElementById("searchInput").addEventListener("input", renderProjects);
 
+/* ═══════════════════════════════════════════
+   CHART + STATS
+═══════════════════════════════════════════ */
 function createChart() {
     const langCount = {};
     let totalStars = 0;
@@ -347,137 +534,140 @@ function createChart() {
         totalStars += repo.stargazers_count;
     });
 
-    const sortedLangs = Object.entries(langCount)
-        .sort((a, b) => b[1] - a[1]);
+    const sorted = Object.entries(langCount).sort((a, b) => b[1] - a[1]);
+    const topLang = sorted.length > 0 ? sorted[0][0] : "—";
 
-    const topLanguage = sortedLangs.length > 0 ? sortedLangs[0][0] : "-";
+    document.getElementById("totalRepos").textContent  = allRepos.length;
+    document.getElementById("topLanguage").textContent = topLang;
+    document.getElementById("totalStars").textContent  = totalStars;
 
-    document.getElementById("totalRepos").textContent = allRepos.length;
-    document.getElementById("topLanguage").textContent = topLanguage;
-    document.getElementById("totalStars").textContent = totalStars;
+    const COLORS = [
+        "#ffcc00","#ff6b6b","#4ecdc4","#45b7d1","#96ceb4",
+        "#ffeaa7","#dda0dd","#98d8c8","#f7dc6f","#bb8fce"
+    ];
 
-    new Chart(document.getElementById("languageChart"), {
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(document.getElementById("languageChart"), {
         type: "doughnut",
         data: {
             labels: Object.keys(langCount),
             datasets: [{
-                data: Object.values(langCount)
+                data: Object.values(langCount),
+                backgroundColor: COLORS,
+                borderColor: "#111",
+                borderWidth: 2
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            animation: {
-                duration: 800
-            },
+            animation: { duration: 900 },
             plugins: {
                 legend: {
-                    labels: {
-                        color: "#fff"
-                    }
+                    labels: { color: "#fff", font: { size: 12 } }
                 }
             }
         }
     });
 }
 
-fetchRepos();
-
-/* ⭐ CANVAS OTIMIZADO */
-const canvas = document.getElementById("stars");
-const ctx = canvas.getContext("2d");
+/* ═══════════════════════════════════════════
+   STARFIELD CANVAS
+═══════════════════════════════════════════ */
+const starsCanvas = document.getElementById("stars");
+const sCtx = starsCanvas.getContext("2d");
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    starsCanvas.width  = window.innerWidth;
+    starsCanvas.height = window.innerHeight;
 }
 resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+window.addEventListener("resize", () => {
+    resizeCanvas();
+    initStars();
+});
 
 const STAR_COUNT = window.innerWidth < 768 ? 60 : 90;
-const CONNECTION_DISTANCE = 90;
+const CONN_DIST  = 90;
 
-let stars = Array.from({ length: STAR_COUNT }, () => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    radius: Math.random() * 1.3
-}));
+let stars = [];
+function initStars() {
+    stars = Array.from({ length: STAR_COUNT }, () => ({
+        x: Math.random() * starsCanvas.width,
+        y: Math.random() * starsCanvas.height,
+        r: Math.random() * 1.3 + 0.3
+    }));
+}
+initStars();
 
-let mouseX = canvas.width / 2;
-let mouseY = canvas.height / 2;
+let mouseX = window.innerWidth  / 2;
+let mouseY = window.innerHeight / 2;
 
 document.addEventListener("mousemove", e => {
     mouseX = e.clientX;
     mouseY = e.clientY;
 
-    const offsetX = (canvas.width / 2 - mouseX) / 50;
-    const offsetY = (canvas.height / 2 - mouseY) / 50;
-
-    document.querySelector(".container").style.transform =
-        `translate(${offsetX}px, ${offsetY}px)`;
+    const ox = (starsCanvas.width  / 2 - mouseX) / 50;
+    const oy = (starsCanvas.height / 2 - mouseY) / 50;
+    document.querySelector(".container").style.transform = `translate(${ox}px, ${oy}px)`;
 });
 
-function animateStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+(function animateStars() {
+    sCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
 
-    const parallaxStrength = 0.015;
+    const px = 0.015;
 
     stars.forEach((s, i) => {
-        const x = s.x + (mouseX - canvas.width / 2) * parallaxStrength;
-        const y = s.y + (mouseY - canvas.height / 2) * parallaxStrength;
+        const sx = s.x + (mouseX - starsCanvas.width  / 2) * px;
+        const sy = s.y + (mouseY - starsCanvas.height / 2) * px;
 
-        ctx.beginPath();
-        ctx.arc(x, y, s.radius, 0, Math.PI * 2);
-        ctx.fillStyle = "white";
-        ctx.fill();
+        sCtx.beginPath();
+        sCtx.arc(sx, sy, s.r, 0, Math.PI * 2);
+        sCtx.fillStyle = "rgba(255,255,255,0.85)";
+        sCtx.fill();
 
-        // Limita conexões por estrela
         for (let j = i + 1; j < i + 6 && j < stars.length; j++) {
             const dx = s.x - stars[j].x;
             const dy = s.y - stars[j].y;
-            const dist = dx * dx + dy * dy;
-
-            if (dist < CONNECTION_DISTANCE * CONNECTION_DISTANCE) {
-                ctx.strokeStyle = "rgba(255,255,255,0.06)";
-                ctx.beginPath();
-                ctx.moveTo(s.x, s.y);
-                ctx.lineTo(stars[j].x, stars[j].y);
-                ctx.stroke();
+            if (dx * dx + dy * dy < CONN_DIST * CONN_DIST) {
+                sCtx.strokeStyle = "rgba(255,255,255,0.05)";
+                sCtx.beginPath();
+                sCtx.moveTo(sx, sy);
+                sCtx.lineTo(
+                    stars[j].x + (mouseX - starsCanvas.width  / 2) * px,
+                    stars[j].y + (mouseY - starsCanvas.height / 2) * px
+                );
+                sCtx.stroke();
             }
         }
     });
 
     requestAnimationFrame(animateStars);
-}
-animateStars();
+})();
 
-/* ✨ CURSOR OTIMIZADO */
-let trailElements = [];
+/* ═══════════════════════════════════════════
+   CURSOR TRAIL
+═══════════════════════════════════════════ */
 const MAX_TRAIL = 12;
+const trailPool = [];
 
 document.addEventListener("mousemove", e => {
-    const trail = document.createElement("div");
-    trail.className = "cursor-trail";
-    trail.style.left = e.clientX + "px";
-    trail.style.top = e.clientY + "px";
-    document.body.appendChild(trail);
+    const dot = document.createElement("div");
+    dot.className = "cursor-trail";
+    dot.style.left = e.clientX + "px";
+    dot.style.top  = e.clientY + "px";
+    document.body.appendChild(dot);
+    trailPool.push(dot);
 
-    trailElements.push(trail);
-
-    if (trailElements.length > MAX_TRAIL) {
-        const old = trailElements.shift();
-        old.remove();
-    }
-
-    setTimeout(() => trail.remove(), 400);
+    if (trailPool.length > MAX_TRAIL) trailPool.shift().remove();
+    setTimeout(() => { dot.remove(); }, 500);
 });
 
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+fetchRepos();
 </script>
-
 </body>
 </html>
-
-
-
-
-
